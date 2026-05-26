@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI Guides — AIpromptEra</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080B12;
+  --surface: #0F1420;
+  --surface2: #161C2D;
+  --border: #1E2740;
+  --border2: #2A3554;
+  --text: #E8ECF4;
+  --text2: #8A95B0;
+  --text3: #4A556A;
+  --gold: #F0B429;
+  --gold2: #FBBF24;
+  --gold-dim: rgba(240,180,41,0.12);
+  --gold-glow: rgba(240,180,41,0.06);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59,130,246,0.12);
+  --green: #10B981;
+  --green-dim: rgba(16,185,129,0.12);
+  --purple: #8B5CF6;
+  --purple-dim: rgba(139,92,246,0.12);
+  --red: #F87171;
+  --red-dim: rgba(248,113,113,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,11,18,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo span {
+  color: var(--gold);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  font-family: 'JetBrains Mono', monospace;
+  transition: opacity 0.2s;
+}
+
+.nav-cta:hover { opacity: 0.85; }
+
+/* HERO */
+.hero {
+  position: relative;
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(240,180,41,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(240,180,41,0.2);
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(36px, 7vw, 68px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero h1 em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(240,180,41,0.3); }
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1px solid var(--border2);
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover { border-color: var(--border2); background: var(--surface); }
+
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-n {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.hero-stat-n span { color: var(--gold); }
+
+.hero-stat-l {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* FEATURED */
+.featured-section {
+  padding: 0 2rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.featured-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+.featured-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+}
+
+.featured-card.hero-card {
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--surface) 100%);
+  border-color: rgba(240,180,41,0.2);
+}
+
+.featured-card.hero-card:hover {
+  border-color: rgba(240,180,41,0.4);
+}
+
+.featured-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240,180,41,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.featured-card:hover::before { opacity: 1; }
+
+.card-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.tag-free { background: var(--green-dim); color: var(--green); }
+.tag-prompts { background: var(--gold-dim); color: var(--gold); }
+.tag-workflow { background: var(--blue-dim); color: var(--blue); }
+.tag-career { background: var(--purple-dim); color: var(--purple); }
+.tag-money { background: var(--green-dim); color: var(--green); }
+.tag-hustle { background: rgba(251,146,60,0.12); color: #FB923C; }
+.tag-content { background: var(--red-dim); color: var(--red); }
+.tag-setup { background: var(--blue-dim); color: var(--blue); }
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.featured-card.hero-card .card-title {
+  font-size: 22px;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text2);
+  transition: all 0.2s;
+}
+
+.featured-card:hover .card-arrow {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+  transform: translate(2px, -2px);
+}
+
+.card-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240,180,41,0.08), transparent 70%);
+  pointer-events: none;
+}
+
+/* FILTERS */
+.filters-section {
+  padding: 0 2rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.filters-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.filter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  margin-right: 4px;
+}
+
+.filter-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+
+.filter-btn:hover { border-color: var(--border2); color: var(--text); }
+.filter-btn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+/* GUIDES GRID */
+.guides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.guide-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+}
+
+.guide-card:hover {
+  border-color: var(--border2);
+  background: var(--surface2);
+  transform: translateY(-1px);
+}
+
+.guide-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.guide-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.guide-card-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.guide-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.guide-free-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  background: var(--green-dim);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.guide-arrow {
+  font-size: 12px;
+  color: var(--text3);
+  transition: all 0.2s;
+}
+
+.guide-card:hover .guide-arrow {
+  color: var(--gold);
+  transform: translate(2px, -2px);
+}
+
+/* EMAIL CAPTURE */
+.email-section {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.email-card {
+  background: linear-gradient(135deg, var(--surface2), var(--surface));
+  border: 1px solid rgba(240,180,41,0.2);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.email-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(240,180,41,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.email-card h2 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.email-card h2 em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+.email-card p {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.email-form {
+  display: flex;
+  gap: 10px;
+  max-width: 440px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.email-input {
+  flex: 1;
+  min-width: 220px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.email-input::placeholder { color: var(--text3); }
+.email-input:focus { border-color: var(--gold); }
+
+.email-submit {
+  background: var(--gold);
+  color: var(--bg);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.email-submit:hover { opacity: 0.85; }
+
+.email-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.footer-logo {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.footer-logo span { color: var(--gold); }
+
+.footer-sub {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero > * {
+  animation: fadeUp 0.6s ease both;
+}
+
+.hero > *:nth-child(1) { animation-delay: 0.1s; }
+.hero > *:nth-child(2) { animation-delay: 0.2s; }
+.hero > *:nth-child(3) { animation-delay: 0.3s; }
+.hero > *:nth-child(4) { animation-delay: 0.4s; }
+.hero > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* SECTION HEADER */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.section-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+}
+
+/* HIDDEN */
+.guide-card.hidden { display: none; }
+
+@media (max-width: 700px) {
+  .featured-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .hero { padding: 3rem 1.5rem 2.5rem; }
+  .guides-grid { grid-template-columns: 1fr; padding: 0 1rem; }
+  .section-header { padding: 0 1rem; }
+  .featured-section, .filters-section { padding: 0 1rem 2rem; }
+  .email-card { padding: 2rem 1.5rem; }
+  .hero-stats { gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AI<span>prompt</span>Era</div>
+  <ul class="nav-links">
+    <li><a href="https://payhip.com/b/LPgky">Free Guides</a></li>
+    <li><a href="https://payhip.com/b/LPgky">TikTok</a></li>
+    <li><a href="https://payhip.com/b/LPgky">Instagram</a></li>
+    <li><a href="https://payhip.com/b/LPgky">About</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Get Free Pack →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Free guides · Updated weekly</div>
+  <h1>Learn AI.<br><em>Actually use it.</em></h1>
+  <p class="hero-sub">Free Claude AI guides, prompts, and workflows for your career, content, money, and side hustle. No fluff. Real results.</p>
+  <div class="hero-actions">
+    <a href="#download" class="btn-primary">Get the free 30-prompt system →</a>
+    <a href="#guides" class="btn-secondary">Browse all guides</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-n">30<span>+</span></div>
+      <div class="hero-stat-l">Free prompts</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n">4</div>
+      <div class="hero-stat-l">Categories</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n">0<span>€</span></div>
+      <div class="hero-stat-l">Cost to start</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n">2<span>min</span></div>
+      <div class="hero-stat-l">Per prompt</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section class="featured-section" id="download">
+  <div class="section-header" style="padding:0;margin-bottom:1.25rem">
+    <div class="section-title">Start here</div>
+  </div>
+  <div class="featured-grid">
+    <a href="https://payhip.com/b/LPgky" class="featured-card hero-card">
+      <div class="card-glow"></div>
+      <div class="card-tag tag-free">FREE DOWNLOAD</div>
+      <div class="card-title">The AI Productivity System — 30 Copy-Paste Claude Prompts</div>
+      <div class="card-desc" style="margin-top:8px;margin-bottom:3rem">Stop doing manually what AI can do in 2 minutes. CV rewrites, content, budgeting, side hustle — fully written prompts ready to copy. Plus Notion template and bonus pack.</div>
+      <div class="card-arrow">→</div>
+    </a>
+    <div style="display:grid;gap:14px">
+      <a href="https://payhip.com/b/LPgky" class="featured-card">
+        <div class="card-tag tag-workflow">NOTION TEMPLATE</div>
+        <div class="card-title">The Daily AI Workflow</div>
+        <div class="card-desc">Your 5-section morning system. Brain dump, task board, prompt library, win tracker, goals dashboard. Runs your career and side hustle before 8am.</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://payhip.com/b/LPgky" class="featured-card">
+        <div class="card-tag tag-prompts">BONUS PACK</div>
+        <div class="card-title">Your First Win This Week</div>
+        <div class="card-desc">5 prompts. 5 situations. One tangible result within 7 days — whatever your situation right now.</div>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<section class="filters-section" id="guides">
+  <div class="section-header" style="padding:0;margin-bottom:1rem">
+    <div class="section-title">All guides</div>
+    <div class="section-count" id="guide-count">12 guides</div>
+  </div>
+  <div class="filters-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="filter('all', this)">All</button>
+    <button class="filter-btn" onclick="filter('career', this)">CV & Career</button>
+    <button class="filter-btn" onclick="filter('content', this)">Content</button>
+    <button class="filter-btn" onclick="filter('money', this)">Money</button>
+    <button class="filter-btn" onclick="filter('hustle', this)">Side Hustle</button>
+    <button class="filter-btn" onclick="filter('setup', this)">Setup</button>
+    <button class="filter-btn" onclick="filter('workflow', this)">Workflow</button>
+  </div>
+</section>
+
+<!-- GUIDES GRID -->
+<div class="guides-grid" id="guides-grid">
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="career">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Get Callbacks: The Claude CV Rewrite System</div>
+      <div class="card-tag tag-career" style="margin:0;white-space:nowrap;flex-shrink:0">Career</div>
+    </div>
+    <div class="guide-card-desc">The exact prompt that rewrites your CV to match any job description in 8 minutes. Keywords, language, structure — all matched. Real before/after included.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="career">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Salary Negotiation Scripts That Actually Work</div>
+      <div class="card-tag tag-career" style="margin:0;white-space:nowrap;flex-shrink:0">Career</div>
+    </div>
+    <div class="guide-card-desc">3 Claude prompts: the negotiation email, the counter-offer response, and the fallback position. Used by real job seekers to get €3,000–€8,000 more.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="career">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Prepare for Any Interview in 20 Minutes</div>
+      <div class="card-tag tag-career" style="margin:0;white-space:nowrap;flex-shrink:0">Career</div>
+    </div>
+    <div class="guide-card-desc">3 prompts: likely questions from the JD, STAR answers from your experience, smart questions to ask the interviewer. 20 minutes. More prepared than 3 hours solo.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="content">
+    <div class="guide-card-top">
+      <div class="guide-card-title">30 Content Ideas in 60 Seconds</div>
+      <div class="card-tag tag-content" style="margin:0;white-space:nowrap;flex-shrink:0">Content</div>
+    </div>
+    <div class="guide-card-desc">One prompt. Any niche. 30 hooks, angles, and post ideas generated in under a minute. Your content calendar done before coffee.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="content">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Repurpose One Piece of Content Into 5 Formats</div>
+      <div class="card-tag tag-content" style="margin:0;white-space:nowrap;flex-shrink:0">Content</div>
+    </div>
+    <div class="guide-card-desc">Instagram caption → TikTok script → LinkedIn post → 3 story slides → email intro. One prompt. 4 minutes. A week of content from a single idea.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="content">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Write a Viral Reel Script in 3 Minutes</div>
+      <div class="card-tag tag-content" style="margin:0;white-space:nowrap;flex-shrink:0">Content</div>
+    </div>
+    <div class="guide-card-desc">The exact prompt structure: scroll-stopping hook, 3 value points, CTA. Works for any niche. Includes a/b hook testing prompt as a bonus.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="money">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Build Your Monthly Budget in 4 Minutes</div>
+      <div class="card-tag tag-money" style="margin:0;white-space:nowrap;flex-shrink:0">Money</div>
+    </div>
+    <div class="guide-card-desc">Paste your income and expenses. Claude categorises everything, flags leaks, and shows you exactly where your money goes. No spreadsheet required.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="money">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Negotiate Any Bill Down in 2 Minutes</div>
+      <div class="card-tag tag-money" style="margin:0;white-space:nowrap;flex-shrink:0">Money</div>
+    </div>
+    <div class="guide-card-desc">Claude writes the script. You make the call. Works for phone, broadband, insurance, gym memberships. Includes what to say if they say no.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="hustle">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Build a Digital Product in One Weekend</div>
+      <div class="card-tag tag-hustle" style="margin:0;white-space:nowrap;flex-shrink:0">Side Hustle</div>
+    </div>
+    <div class="guide-card-desc">5 prompts in order: niche finder, product idea generator, pricing psychology, sales page, launch caption. The full build process from zero to listed.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="hustle">
+    <div class="guide-card-top">
+      <div class="guide-card-title">The DM Sales Script That Doesn't Feel Salesy</div>
+      <div class="card-tag tag-hustle" style="margin:0;white-space:nowrap;flex-shrink:0">Side Hustle</div>
+    </div>
+    <div class="guide-card-desc">Claude writes a natural DM conversation script for warm leads. Includes 3 objection responses. Feels human, not copy-paste. Converts warm interest into sales.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="setup">
+    <div class="guide-card-top">
+      <div class="guide-card-title">Set Up Claude in 10 Minutes — The Right Way</div>
+      <div class="card-tag tag-setup" style="margin:0;white-space:nowrap;flex-shrink:0">Setup</div>
+    </div>
+    <div class="guide-card-desc">Free account. Custom instructions. The exact settings that make every output 10x better from the first message. What 95% of users skip.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://payhip.com/b/LPgky" class="guide-card" data-cat="workflow">
+    <div class="guide-card-top">
+      <div class="guide-card-title">The Daily AI Workflow That Runs Before 8am</div>
+      <div class="card-tag tag-workflow" style="margin:0;white-space:nowrap;flex-shrink:0">Workflow</div>
+    </div>
+    <div class="guide-card-desc">5 morning prompts. 45 minutes. Priorities set, emails drafted, content planned, budget checked, one side hustle task done. The full morning system.</div>
+    <div class="guide-card-footer">
+      <span class="guide-free-tag">FREE</span>
+      <span class="guide-arrow">↗</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- EMAIL CAPTURE -->
+<section class="email-section" id="email">
+  <div class="email-card">
+    <h2>Get the free 30-prompt system.<br><em>Straight to your inbox.</em></h2>
+    <p>The complete AI Productivity System — 30 copy-paste Claude prompts, the Notion daily workflow, and the First Win bonus pack. Free. No spam. Ever.</p>
+    <div class="email-form">
+      <input type="email" class="email-input" placeholder="your@email.com">
+      <button class="email-submit" onclick="handleSubmit()">Send me the system →</button>
+    </div>
+    <div class="email-note">Instant download · No credit card · Unsubscribe anytime</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">AI<span>prompt</span>Era</div>
+  <div class="footer-sub">@AIpromptEra · Free AI guides updated weekly</div>
+</footer>
+
+<script>
+function filter(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('.guide-card');
+  let visible = 0;
+  cards.forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.classList.remove('hidden');
+      visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  document.getElementById('guide-count').textContent = visible + ' guide' + (visible !== 1 ? 's' : '');
+}
+
+function handleSubmit() {
+  const input = document.querySelector('.email-input');
+  const btn = document.querySelector('.email-submit');
+  if (!input.value || !input.value.includes('@')) {
+    input.style.borderColor = '#F87171';
+    setTimeout(() => input.style.borderColor = '', 1500);
+    return;
+  }
+  btn.textContent = '✓ Check your inbox';
+  btn.style.background = '#10B981';
+  input.value = '';
+  input.placeholder = 'Thanks! Check your inbox.';
+}
+</script>
+
+</body>
+</html>
